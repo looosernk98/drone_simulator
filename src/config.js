@@ -307,10 +307,10 @@ map.addLayer({
     }
 });
 
-       let running = false;
+      //  let running = false;
         function animate() {
-            running = true;
-            document.getElementById('replay').disabled = true;
+            // running = true;
+            // document.getElementById('replay').disabled = true;
             const start =
                 route.features[0].geometry.coordinates[
                     counter >= steps ? counter - 1 : counter
@@ -320,11 +320,10 @@ map.addLayer({
                 route.features[0].geometry.coordinates[
                     counter >= steps ? counter : counter + 1
                 ];
-                console.log('start: ', start,end, counter, steps);
 
             if (!start || !end) {
-                running = false;
-                document.getElementById('replay').disabled = false;
+                // running = false;
+                // document.getElementById('replay').disabled = false;
                 return;
             }
             // Update point geometry to a new position based on counter denoting
@@ -351,23 +350,23 @@ map.addLayer({
             counter = counter + 1;
         }
 
-        document.getElementById('replay').addEventListener('click', () => {
-            if (running) {
-                void 0;
-            } else {
-                // Set the coordinates of the original point back to origin
-                point.features[0].geometry.coordinates = origin;
+        // document.getElementById('replay').addEventListener('click', () => {
+        //     if (running) {
+        //         void 0;
+        //     } else {
+        //         // Set the coordinates of the original point back to origin
+        //         point.features[0].geometry.coordinates = origin;
 
-                // Update the source layer
-                map.getSource('point').setData(point);
+        //         // Update the source layer
+        //         map.getSource('point').setData(point);
 
-                // Reset the counter
-                counter = 0;
+        //         // Reset the counter
+        //         counter = 0;
 
-                // Restart the animation
-                animate(counter);
-            }
-        });
+        //         // Restart the animation
+        //         animate(counter);
+        //     }
+        // });
 
         // Start the animation
         animate(counter);

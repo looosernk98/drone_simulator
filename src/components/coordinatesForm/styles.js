@@ -1,10 +1,9 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-
 `;
 
 export const FormRow = styled.div`

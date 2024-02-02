@@ -1,45 +1,62 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import * as S from './styles.js'
 import Input from '../common/input';
 import DateTimeInput from '../common/dateTimeInput';
-import Button  from '../common/button/index';
-import { useEffect } from 'react';
+import Button from '../common/button/index';
+import FileInput from '../common/fileInput/index.jsx';
 
 const CoordinateForm = ({
-  // setCoordinate,
-  setCoordinateList
+  coordinateList,
+  editIndex,
+  setCoordinateList,
+  setEditIndex,
 }) => {
-  const [time, setTime] = useState(new Date().toISOString());
+  const [time, setTime] = useState();
   const [latitude, setLatitude] = useState()
   const [longitude, setLongitude] = useState()
-  console.log('longitude: ', longitude, latitude);
- const [empty, setEmpty] = useState(false);
-  // useEffect(() => {
-  //     if(!empty) return
-  //     setLatitude(null)
-  //     setLongitude(null)
-  // },[empty])
+
+  useEffect(() => {
+    if (editIndex === null || editIndex < 0) return;
+
+    const editableCoord = coordinateList[editIndex];
+
+    setLatitude(editableCoord?.latitude)
+    setLongitude(editableCoord?.longitude)
+    setTime(editableCoord?.time)
+  }, [editIndex])
+
   const handleLatitudeChange = (e) => {
     setLatitude(e?.target?.value)
   }
+
   const handleLongitudeChange = (e) => {
     setLongitude(e?.target?.value)
   }
+
   const addCoordinates = () => {
-     setLatitude(null)
-     setLongitude(null)
-    // setEmpty(true)
-    //  handleLatitudeChange(null)
-    //  handleLongitudeChange(null)
-     setCoordinateList({
-      time,
-      latitude,
-      longitude
-     })
-     
+    setLatitude('');
+    setLongitude('');
+    setTime('');
+
+    if (editIndex !== null && editIndex >= 0) {
+      const coord = [...coordinateList];
+      coord.splice(editIndex, 1, { time, latitude, longitude })
+
+      setCoordinateList(coord)
+      setEditIndex(null)
+    } else {
+      setCoordinateList([...coordinateList, { time, latitude, longitude }])
+    }
+
   }
-  return(
+
+  const handleFileUpload = (data) => {
+    data = data.map(item => ({ ...item, time: new Date(item?.time).toISOString() }))
+    setCoordinateList([...coordinateList, ...data])
+  };
+
+  return (
     <S.FormContainer>
       <S.FormRow>
         <DateTimeInput
@@ -49,25 +66,27 @@ const CoordinateForm = ({
         <Input
           type='text'
           label='Latitude'
-          placeholder = 'input latitude'
-          value = {latitude}
-          onChange = {handleLatitudeChange}
+          placeholder='input latitude'
+          value={latitude}
+          onChange={handleLatitudeChange}
         />
         <Input
           type='text'
           label='Longitude'
-          placeholder = 'input longitude'
-          value = {longitude}
-          onChange = {handleLongitudeChange}
+          placeholder='input longitude'
+          value={longitude}
+          onChange={handleLongitudeChange}
         />
         <Button
-         type='button'
-         buttonText = {'Add Coordinate'}
-         onClick={addCoordinates}
+          type='button'
+          buttonText={editIndex !== null && editIndex >= 0 ? 'Edit Coordinate' : 'Add Coordinate'}
+          onClick={addCoordinates}
+          disabled={!latitude || !longitude || !time}
         />
+        <FileInput onFileUpload={handleFileUpload} />
       </S.FormRow>
     </S.FormContainer>
   )
 }
 
-export default CoordinateForm
+export default CoordinateForm;

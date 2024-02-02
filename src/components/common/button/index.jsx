@@ -2,16 +2,18 @@ import React from "react";
 import * as S from './styles.js'
 
 const Button = ({
-    type='button',
+    type = 'button',
     buttonText,
-    onClick
+    onClick,
+    disabled = false
 }) => {
-    return(
+    return (
         <S.Button
-         type={type}
-         onClick={onClick}
+            type={type}
+            onClick={onClick}
+            disabled={disabled}
         >
-          {buttonText}
+            {buttonText}
         </S.Button>
     )
 }
