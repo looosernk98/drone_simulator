@@ -1,30 +1,32 @@
-import React, { useEffect, useRef, useState } from "react";
-import { initializeMap } from "./logic.js";
-import { FcCollapse } from "react-icons/fc";
-import { FcExpand } from "react-icons/fc";
+import React, { useState } from "react";
+import { FcCollapse, FcExpand } from "react-icons/fc";
 import CoordinateForm from "./components/coordinatesForm/index";
 import CoordinatesTable from "./components/coordinatesTable";
 import Widget from "./components/widget";
 import Tooltip from "./components/common/tooltip/index.jsx";
 import "./App.css";
+import Mapbox from "./components/mapbox/mapbox.jsx";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { dividePathInChunks } from "./utils/util";
+import { SimulationContext } from "./context";
 
 const tooltipStyle = { fontSize: "14px", fontWeight: "500" };
 const MAP_ID = "map";
 
 function App() {
-  const ref = useRef();
-  const [mapRef, setMapRef] = useState(ref);
+
   const [coordinateList, setCoordinateList] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [isCollapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    const map = initializeMap(MAP_ID);
-    setMapRef(map);
-  }, []);
+  const [playSimulation, setPlaySimulation] = useState(false);
 
   return (
-    <>
+    <SimulationContext.Provider
+      value={{
+        playSimulation,
+        setPlaySimulation,
+      }}
+    >
       <h1>Drone Simulator</h1>
       <main>
         <div className="info">
@@ -53,17 +55,15 @@ function App() {
           ) : null}
         </div>
         <div className="map-content">
-          <div id={MAP_ID}></div>
+          <div id={MAP_ID}>
+            <Mapbox coordinateList={coordinateList} />
+          </div>
           <div className="simulation-info">
-            <Widget
-              coordinateList={coordinateList}
-              onSimulateClick={() => {}}
-              onPauseClick={() => {}}
-            />
+            <Widget coordinateList={coordinateList} />
           </div>
         </div>
       </main>
-    </>
+    </SimulationContext.Provider>
   );
 }
 

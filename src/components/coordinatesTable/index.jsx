@@ -4,7 +4,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import Tooltip from "../common/tooltip";
 import * as S from './styles'
 
-const COLUMNS = ['S.No', 'Latitude', 'Longitude', 'Timestamp', 'Action'];
+const COLUMNS = ['S.No','Longitude', 'Latitude', 'Timestamp', 'Action'];
 
 const CoordinatesTable = ({
     coordinateList,
@@ -36,9 +36,9 @@ const CoordinatesTable = ({
                     ? coordinateList.map((coord, index) => (
                         <S.TableRow key={`row-${index}`}>
                             <S.TableData> {index + 1} </S.TableData>
-                            <S.TableData>{coord?.latitude}</S.TableData>
-                            <S.TableData>{coord?.longitude}</S.TableData>
-                            <S.TableData>{coord?.time}</S.TableData>
+                            <S.TableData>{coord?.longitude || coord[0]}</S.TableData>
+                            <S.TableData>{coord?.latitude || coord[1]}</S.TableData>
+                            <S.TableData>{coord?.time || new Date(coord[2]).toISOString()}</S.TableData>
                             <S.ActionColumn>
                                 <Tooltip
                                     content={'Edit'}

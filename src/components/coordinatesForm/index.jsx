@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
-import * as S from './styles.js'
 import Input from '../common/input';
 import DateTimeInput from '../common/dateTimeInput';
 import Button from '../common/button/index';
 import FileInput from '../common/fileInput/index.jsx';
+import * as S from './styles.js'
 
 const CoordinateForm = ({
   coordinateList,
@@ -12,9 +11,9 @@ const CoordinateForm = ({
   setCoordinateList,
   setEditIndex,
 }) => {
-  const [time, setTime] = useState();
-  const [latitude, setLatitude] = useState()
-  const [longitude, setLongitude] = useState()
+  const [time, setTime] = useState(' ');
+  const [latitude, setLatitude] = useState(' ')
+  const [longitude, setLongitude] = useState(' ')
 
   useEffect(() => {
     if (editIndex === null || editIndex < 0) return;
@@ -35,9 +34,9 @@ const CoordinateForm = ({
   }
 
   const addCoordinates = () => {
-    setLatitude('');
-    setLongitude('');
-    setTime('');
+    setLatitude(' ');
+    setLongitude(' ');
+    setTime(' ');
 
     if (editIndex !== null && editIndex >= 0) {
       const coord = [...coordinateList];
@@ -64,18 +63,18 @@ const CoordinateForm = ({
           setTime={setTime}
         />
         <Input
-          type='text'
-          label='Latitude'
-          placeholder='input latitude'
-          value={latitude}
-          onChange={handleLatitudeChange}
-        />
-        <Input
-          type='text'
+          type='number'
           label='Longitude'
           placeholder='input longitude'
           value={longitude}
           onChange={handleLongitudeChange}
+        />
+        <Input
+          type='number'
+          label='Latitude'
+          placeholder='input latitude'
+          value={latitude}
+          onChange={handleLatitudeChange}
         />
         <Button
           type='button'

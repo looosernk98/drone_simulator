@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '../common/button';
+import { SimulationContext } from '../../context';
 import * as S from './styles'
 
-const Widget = ({
-    onSimulateClick,
-    onPauseClick,
-}) => {
+const Widget = ({ coordinateList }) => {
+    const {
+        setPlaySimulation
+    } = useContext(SimulationContext);
     return (
         <S.Container>
             <S.LiveSimulationInfo>
@@ -19,8 +20,12 @@ const Widget = ({
                     <S.Value>208.0</S.Value>
                 </S.Detail>
                 <S.Detail>
-                    <S.Label>Battery</S.Label>
-                    <S.Value>70%</S.Value>
+                    <S.Label>Vertical Speed</S.Label>
+                    <S.Value>2 m/s</S.Value>
+                </S.Detail>
+                <S.Detail>
+                    <S.Label>Horizontal Speed</S.Label>
+                    <S.Value>4 m/s</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Latency</S.Label>
@@ -31,12 +36,8 @@ const Widget = ({
                     <S.Value>20.3 m</S.Value>
                 </S.Detail>
                 <S.Detail>
-                    <S.Label>Vertical Speed</S.Label>
-                    <S.Value>2 m/s</S.Value>
-                </S.Detail>
-                <S.Detail>
-                    <S.Label>Horizontal Speed</S.Label>
-                    <S.Value>4 m/s</S.Value>
+                    <S.Label>Battery</S.Label>
+                    <S.Value>70%</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Timestamp</S.Label>
@@ -49,21 +50,21 @@ const Widget = ({
                     <Button
                         type='button'
                         buttonText={'Simulate'}
-                        onClick={onSimulateClick}
+                        onClick={() => setPlaySimulation(true)}
                     />
                 </S.Detail>
                 <S.Detail>
                     <Button
                         type='button'
                         buttonText={'Pause'}
-                        onClick={onPauseClick}
+                        onClick={() => setPlaySimulation(false)}
                     />
                 </S.Detail>
             </S.Controls>
             <S.PathIndicators>
-                    <S.TravelledPath><label>Travelled Path</label><span></span></S.TravelledPath><br/>
-                    <S.UntravelledPath><label>Untravelled Path</label><span></span></S.UntravelledPath>
-                </S.PathIndicators>
+                <S.TravelledPath><label>Travelled Path</label><span></span></S.TravelledPath><br />
+                <S.UntravelledPath><label>Untravelled Path</label><span></span></S.UntravelledPath>
+            </S.PathIndicators>
         </S.Container>
     )
 }
