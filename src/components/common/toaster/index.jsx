@@ -1,3 +1,4 @@
+import React from 'react';
 import { ToastContainer as ReactToastContainer } from 'react-toastify';
 
 const ToastContainer = ({

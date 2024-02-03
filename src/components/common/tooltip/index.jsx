@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 
 const TOOLTIP_ID = 'tooltip-cool'
