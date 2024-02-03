@@ -4,7 +4,6 @@ import * as turf from "@turf/turf";
 // env configuration
 export const envConfig = {
   mapBoxAcessToken:process.env.MAPBOX_ACCESS_TOKEN,
-    // "pk.eyJ1IjoidmluZWV0MiIsImEiOiJjbG9xM3B3aW4waWFqMmlwZWVwbnJxbXZzIn0.AkzW_k5F0KjJK0kIJNb4VA",
 };
 
 // Mapbox configuration
