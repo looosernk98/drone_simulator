@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Papa from 'papaparse';
+import { toast } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import * as S from './styles'
 
@@ -32,11 +33,13 @@ const FileInput = ({ onFileUpload }) => {
           onFileUpload(data);
         }
       };
-      setFileName(file?.name)
+
       if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         reader.readAsBinaryString(file);
+        setFileName(file?.name)
+        toast.success('File uploaded successfully',)
       } else {
-        console.error('Unsupported file type');
+        toast.error('Unsupported file type')
       }
     });
   }, [onFileUpload]);

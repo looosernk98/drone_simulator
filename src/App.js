@@ -5,8 +5,10 @@ import { FcExpand } from "react-icons/fc";
 import CoordinateForm from "./components/coordinatesForm/index";
 import CoordinatesTable from "./components/coordinatesTable";
 import Widget from "./components/widget";
+import Tooltip from "./components/common/tooltip/index.jsx";
 import "./App.css";
 
+const tooltipStyle = { fontSize: "14px", fontWeight: "500" };
 const MAP_ID = "map";
 
 function App() {
@@ -27,7 +29,14 @@ function App() {
       <main>
         <div className="info">
           <div id="collapse" onClick={() => setCollapsed(!isCollapsed)}>
-            {isCollapsed ? <FcExpand /> : <FcCollapse />}
+            <Tooltip
+              id="table"
+              position="top"
+              styles={tooltipStyle}
+              content={isCollapsed ? "Expand Table" : "Collapse Table"}
+            >
+              {isCollapsed ? <FcExpand /> : <FcCollapse />}
+            </Tooltip>
           </div>
           <CoordinateForm
             coordinateList={coordinateList}

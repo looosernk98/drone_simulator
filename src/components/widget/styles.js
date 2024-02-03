@@ -40,29 +40,29 @@ export const Value = styled.div`
   font-weight: 400;
   opacity: 0.9;
 `;
-export const PathIndicators = styled.div`
- 
-`;
+export const PathIndicators = styled.div``;
 export const UntravelledPath = styled.div`
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   >label{
-      display: block;
-      margin: 0 10px;
-   }
-   >span{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  > label {
+    display: block;
+    margin: 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  > span {
     display: block;
     width: 150px;
     height: 7px;
     background: #1634f6;
-   }
+  }
 `;
 export const TravelledPath = styled(UntravelledPath)`
-   >span{
+  > span {
     background: #008000;
-   }
-
+  }
 `;
 
 export const Controls = styled(LiveSimulationInfo)``;

@@ -20,7 +20,6 @@ export const initializeMap = (
     style: "mapbox://styles/mapbox/streets-v12", // style URL
     center: startPosition, // starting position [lng, lat]
     zoom: 4, // starting zoom
-    // pitch: 40
   });
   map.addControl(
     new mapboxgl.GeolocateControl({
@@ -76,25 +75,25 @@ export const initializeMap = (
         type: "Feature",
         properties: {},
         geometry: {
-          type: 'Point',
-          coordinates: []
+          type: "Point",
+          coordinates: [],
         },
       },
     });
 
     map.addLayer({
-      'id': 'drone_pos',
-      'type': 'symbol',
-      'source': 'drone_pos',
-      'layout': {
-        'icon-image': 'airport',
-        'icon-size': 1.5,
-        'icon-rotate': ['get', 'bearing'],
-        'icon-rotation-alignment': 'map',
-        'icon-allow-overlap': true,
-        'icon-ignore-placement': true
-      }
-      });
+      id: "drone_pos",
+      type: "symbol",
+      source: "drone_pos",
+      layout: {
+        "icon-image": "airport",
+        "icon-size": 1.5,
+        "icon-rotate": ["get", "bearing"],
+        "icon-rotation-alignment": "map",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+      },
+    });
 
     map.addLayer({
       id: "polyline-2",
@@ -112,10 +111,25 @@ export const initializeMap = (
     });
 
     const geojson = drawDronePath(map);
+    displayInViewport(map, geojson.features[0].geometry.coordinates);
     handleDroneSimulation(geojson, map);
   });
   return map;
 };
+
+function displayInViewport(map, coords) {
+  // Create a 'LngLatBounds' with both corners at the first coordinate.
+  const bounds = new mapboxgl.LngLatBounds(coords[0], coords[0]);
+
+  // Extend the 'LngLatBounds' to include every coordinate in the bounds result.
+  for (const coord of coords) {
+    bounds.extend(coord);
+  }
+
+  map.fitBounds(bounds, {
+    padding: 20,
+  });
+}
 
 async function handleDroneSimulation(geojson, map) {
   //let running = true;
@@ -137,21 +151,26 @@ async function handleDroneSimulation(geojson, map) {
             },
           ],
         };
-        map.getSource("unvisited").setData(geojson);
-        map.getSource("visited").setData(data);
-        map.getSource('drone_pos').setData({
+        const drone_pos_data = {
           type: "Feature",
           properties: {
-            bearing: travelledCoord.length >= 2? turf.bearing(
-              turf.point(travelledCoord[travelledCoord.length - 2]),
-              turf.point(travelledCoord[travelledCoord.length - 1])
-          ): null
+            bearing:
+              travelledCoord.length >= 2
+                ? turf.bearing(
+                    turf.point(travelledCoord[travelledCoord.length - 2]),
+                    turf.point(travelledCoord[travelledCoord.length - 1])
+                  )
+                : null,
           },
           geometry: {
-            type: 'Point',
-            coordinates: travelledCoord[travelledCoord.length - 1]
+            type: "Point",
+            coordinates: travelledCoord[travelledCoord.length - 1],
           },
-        })
+        }
+        map.getSource("unvisited").setData(geojson);
+        map.getSource("visited").setData(data);
+        map.getSource("drone_pos").setData(drone_pos_data);
+        map.panTo(travelledCoord[travelledCoord.length - 1]);
         res();
       }, 200);
     });

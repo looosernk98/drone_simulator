@@ -1,6 +1,7 @@
 import React from "react";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Tooltip from "../common/tooltip";
 import * as S from './styles'
 
 const COLUMNS = ['S.No', 'Latitude', 'Longitude', 'Timestamp', 'Action'];
@@ -39,8 +40,20 @@ const CoordinatesTable = ({
                             <S.TableData>{coord?.longitude}</S.TableData>
                             <S.TableData>{coord?.time}</S.TableData>
                             <S.ActionColumn>
-                                <S.Edit onClick={() => handleEditCoordinate(index)}><CiEdit /></S.Edit>
-                                <S.Delete onClick={() => handleDeleteCoordinate(index)}><RiDeleteBin5Line /></S.Delete>
+                                <Tooltip
+                                    content={'Edit'}
+                                    position='bottom'
+                                    id='edit'
+                                >
+                                    <S.Edit onClick={() => handleEditCoordinate(index)}><CiEdit /></S.Edit>
+                                </Tooltip>
+                                <Tooltip
+                                    content={'Delete'}
+                                    position='bottom'
+                                    id='delete'
+                                >
+                                    <S.Delete onClick={() => handleDeleteCoordinate(index)}><RiDeleteBin5Line /></S.Delete>
+                                </Tooltip>
                             </S.ActionColumn>
                         </S.TableRow>
                     ))
