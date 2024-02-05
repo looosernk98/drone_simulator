@@ -1,32 +1,49 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CiEdit } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { SimulationContext } from "../../context";
 import Tooltip from "../common/tooltip";
 import * as S from './styles'
 
-const COLUMNS = ['S.No','Longitude', 'Latitude', 'Timestamp', 'Action'];
+const COLUMNS = ['S.No', 'Longitude', 'Latitude', 'Timestamp', 'Action'];
 
 const CoordinatesTable = ({
     coordinateList,
     setEditIndex,
-    setCoordinateList
+    setCoordinateList,
+    editIndex
 }) => {
+    const { playSimulation } = useContext(SimulationContext);
 
     const handleEditCoordinate = (index) => {
+        if (playSimulation) return true;
         setEditIndex(index)
     }
     const handleDeleteCoordinate = (index) => {
+        if (playSimulation || editIndex != null) return true;
         const coord = [...coordinateList]
         coord.splice(index, 1)
         setCoordinateList(coord)
+    }
+    const handleDeleteAllRows = () => {
+        if (playSimulation || editIndex != null) return true;
+        setCoordinateList([])
     }
     return (
         <S.TableContainer>
             <S.TableHead>
                 <S.TableRow>
-                    {COLUMNS.map(column => (
-                        <S.TableHeading>
+                    {COLUMNS.map((column, index) => (
+                        <S.TableHeading key={`th-${index}`}>
                             {column}
+                            {index === COLUMNS.length - 1 && coordinateList?.length
+                                ? <Tooltip
+                                    content={!playSimulation ? 'Delete All Rows' : ''}
+                                    position='bottom'
+                                    id='delete-all'
+                                ><S.Delete disabled={editIndex != null} onClick={handleDeleteAllRows}><RiDeleteBin5Line /></S.Delete></Tooltip>
+
+                                : null}
                         </S.TableHeading>
                     ))}
                 </S.TableRow>
@@ -38,21 +55,21 @@ const CoordinatesTable = ({
                             <S.TableData> {index + 1} </S.TableData>
                             <S.TableData>{coord?.longitude || coord[0]}</S.TableData>
                             <S.TableData>{coord?.latitude || coord[1]}</S.TableData>
-                            <S.TableData>{coord?.time || new Date(coord[2]).toISOString()}</S.TableData>
-                            <S.ActionColumn>
+                            <S.TableData>{new Date(coord?.time).toISOString() || new Date(coord[2]).toISOString()}</S.TableData>
+                            <S.ActionColumn disabled={playSimulation}>
                                 <Tooltip
-                                    content={'Edit'}
+                                    content={!playSimulation ? 'Edit' : ''}
                                     position='bottom'
                                     id='edit'
                                 >
                                     <S.Edit onClick={() => handleEditCoordinate(index)}><CiEdit /></S.Edit>
                                 </Tooltip>
                                 <Tooltip
-                                    content={'Delete'}
+                                    content={!playSimulation ? 'Delete' : ''}
                                     position='bottom'
                                     id='delete'
                                 >
-                                    <S.Delete onClick={() => handleDeleteCoordinate(index)}><RiDeleteBin5Line /></S.Delete>
+                                    <S.Delete disabled={editIndex != null} onClick={() => handleDeleteCoordinate(index)}><RiDeleteBin5Line /></S.Delete>
                                 </Tooltip>
                             </S.ActionColumn>
                         </S.TableRow>

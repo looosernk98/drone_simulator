@@ -1,4 +1,4 @@
-export const coordinates = [
+export const coordinatesData = [
   {
     longitude: 75.8681996, //long
     latitude: 22.7203616, // lat

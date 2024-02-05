@@ -3,12 +3,16 @@ import { useDropzone } from 'react-dropzone';
 import Papa from 'papaparse';
 import { toast } from 'react-toastify';
 import * as XLSX from 'xlsx';
+import { isCoordinatesInRange } from '../../../utils/util';
 import * as S from './styles'
 
-const FileInput = ({ onFileUpload }) => {
+const FileInput = ({ onFileUpload, disabled }) => {
   const [fileName, setFileName] = useState('');
+  const [error, setError] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
+    if (disabled) return;
+
     acceptedFiles.forEach((file) => {
       const reader = new FileReader();
 
@@ -20,6 +24,7 @@ const FileInput = ({ onFileUpload }) => {
           Papa.parse(result, {
             complete: (parsedData) => {
               onFileUpload(parsedData.data);
+              if (!isCoordinatesInRange(parsedData?.data, false)) setError(true)
             },
             header: true,
           });
@@ -31,13 +36,14 @@ const FileInput = ({ onFileUpload }) => {
           const sheet = workbook.Sheets[sheetName];
           const data = XLSX.utils.sheet_to_row_object_array(sheet, { header: 0 });
           onFileUpload(data);
+          if (!isCoordinatesInRange(data, false)) setError(true)
+
         }
       };
 
       if (file.type === 'text/csv' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         reader.readAsBinaryString(file);
         setFileName(file?.name)
-        toast.success('File uploaded successfully',)
       } else {
         toast.error('Unsupported file type')
       }
@@ -52,7 +58,7 @@ const FileInput = ({ onFileUpload }) => {
   return (
     <S.InputWrapper {...getRootProps()}>
       <input {...getInputProps()} />
-      <S.ChooseFile>Choose file <span>{fileName}</span></S.ChooseFile>
+      <S.ChooseFile disabled={disabled}>Choose file {!error ? <span>{fileName}</span> : null}</S.ChooseFile>
     </S.InputWrapper>
   );
 };

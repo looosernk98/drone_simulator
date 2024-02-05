@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Input from '../common/input';
 import DateTimeInput from '../common/dateTimeInput';
 import Button from '../common/button/index';
 import FileInput from '../common/fileInput/index.jsx';
 import * as S from './styles.js'
+import { isCoordinatesInRange, isLatitudeInRange, isLongitudeInRange } from '../../utils/util';
+import { toast } from 'react-toastify';
+import { SimulationContext } from '../../context';
 
 const CoordinateForm = ({
   coordinateList,
@@ -11,9 +14,11 @@ const CoordinateForm = ({
   setCoordinateList,
   setEditIndex,
 }) => {
-  const [time, setTime] = useState(' ');
-  const [latitude, setLatitude] = useState(' ')
-  const [longitude, setLongitude] = useState(' ')
+
+  const { playSimulation } = useContext(SimulationContext);
+  const [time, setTime] = useState('');
+  const [latitude, setLatitude] = useState('')
+  const [longitude, setLongitude] = useState('')
 
   useEffect(() => {
     if (editIndex === null || editIndex < 0) return;
@@ -22,7 +27,7 @@ const CoordinateForm = ({
 
     setLatitude(editableCoord?.latitude)
     setLongitude(editableCoord?.longitude)
-    setTime(editableCoord?.time)
+    setTime(new Date(editableCoord?.time).toISOString())
   }, [editIndex])
 
   const handleLatitudeChange = (e) => {
@@ -34,9 +39,17 @@ const CoordinateForm = ({
   }
 
   const addCoordinates = () => {
-    setLatitude(' ');
-    setLongitude(' ');
-    setTime(' ');
+    if (!isLatitudeInRange(latitude)) {
+      toast.error('Latitude must be in range from -90 to 90')
+      return;
+    }
+    if (!isLongitudeInRange(longitude)) {
+      toast.error('Longitude must be in range from -180 to 180')
+      return;
+    }
+    setLatitude('');
+    setLongitude('');
+    setTime('');
 
     if (editIndex !== null && editIndex >= 0) {
       const coord = [...coordinateList];
@@ -51,8 +64,11 @@ const CoordinateForm = ({
   }
 
   const handleFileUpload = (data) => {
-    data = data.map(item => ({ ...item, time: new Date(item?.time).toISOString() }))
-    setCoordinateList([...coordinateList, ...data])
+    if (!isCoordinatesInRange(data, true)) return;
+
+    toast.success('File uploaded successfully')
+    const dataList = data?.map((item) => ({ ...item, time: new Date(item?.time).toISOString() }))
+    setCoordinateList([...coordinateList, ...dataList])
   };
 
   return (
@@ -61,6 +77,7 @@ const CoordinateForm = ({
         <DateTimeInput
           time={time}
           setTime={setTime}
+          disabled={playSimulation}
         />
         <Input
           type='number'
@@ -68,6 +85,7 @@ const CoordinateForm = ({
           placeholder='input longitude'
           value={longitude}
           onChange={handleLongitudeChange}
+          isDisabled={playSimulation}
         />
         <Input
           type='number'
@@ -75,14 +93,15 @@ const CoordinateForm = ({
           placeholder='input latitude'
           value={latitude}
           onChange={handleLatitudeChange}
+          isDisabled={playSimulation}
         />
         <Button
           type='button'
           buttonText={editIndex !== null && editIndex >= 0 ? 'Edit Coordinate' : 'Add Coordinate'}
           onClick={addCoordinates}
-          disabled={!latitude || !longitude || !time}
+          disabled={!latitude || !longitude || !time || playSimulation}
         />
-        <FileInput onFileUpload={handleFileUpload} />
+        <FileInput disabled={playSimulation} onFileUpload={handleFileUpload} />
       </S.FormRow>
     </S.FormContainer>
   )

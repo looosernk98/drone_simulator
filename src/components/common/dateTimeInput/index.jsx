@@ -4,6 +4,7 @@ import * as S from './styles.js'
 const DateTimeInput = ({
     time,
     setTime,
+    disabled
 }) => {
 
     const handleTimeChange = (e) => {
@@ -20,6 +21,7 @@ const DateTimeInput = ({
                     step="1"
                     value={time?.split('.')[0]}
                     onChange={handleTimeChange}
+                    disabled={disabled}
                 />
             </S.DateTimeSelector>
         </>

@@ -19,7 +19,6 @@ const Input = ({
         type={type}
         placeholder={placeholder}
         value={value}
-        defaultValue={' '}
         onChange={onChange}
         disabled={isDisabled}
         required={required}

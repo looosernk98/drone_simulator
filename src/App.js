@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcCollapse, FcExpand } from "react-icons/fc";
 import CoordinateForm from "./components/coordinatesForm/index";
 import CoordinatesTable from "./components/coordinatesTable";
@@ -7,15 +7,17 @@ import Tooltip from "./components/common/tooltip/index.jsx";
 import "./App.css";
 import Mapbox from "./components/mapbox/mapbox.jsx";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { dividePathInChunks } from "./utils/util";
 import { SimulationContext } from "./context";
+import { coordinatesData } from "./constants/coordinatesData";
 
 const tooltipStyle = { fontSize: "14px", fontWeight: "500" };
 const MAP_ID = "map";
+const default_coordinates_input = coordinatesData;
 
 function App() {
-
-  const [coordinateList, setCoordinateList] = useState([]);
+  const [coordinateList, setCoordinateList] = useState(
+    default_coordinates_input
+  );
   const [editIndex, setEditIndex] = useState(null);
   const [isCollapsed, setCollapsed] = useState(false);
   const [playSimulation, setPlaySimulation] = useState(false);
@@ -49,6 +51,7 @@ function App() {
           {!isCollapsed ? (
             <CoordinatesTable
               coordinateList={coordinateList}
+              editIndex={editIndex}
               setEditIndex={setEditIndex}
               setCoordinateList={setCoordinateList}
             />

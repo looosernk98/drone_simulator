@@ -1,4 +1,6 @@
 import * as turf from "@turf/turf";
+import { toast } from "react-toastify";
+import mapboxgl from "mapbox-gl";
 
 export const dividePathInChunks = (coordinates) => {
   coordinates.sort((a, b) => {
@@ -46,17 +48,50 @@ export const dividePathInChunks = (coordinates) => {
 };
 
 export const convertCoordinatesObjectToArray = (coord) => {
- return coord.map(item => [item?.longitude, item?.latitude, new Date(item?.time).getTime()]);
-}
-
-export const displayPathInViewport = (map, coords) => {
-  const line = turf.lineString(coords);
-  const bbox = turf.bbox(line);
-  map.fitBounds(bbox, {
-    padding: 20,
-  });
+  return coord.map((item) => [
+    item?.longitude,
+    item?.latitude,
+    new Date(item?.time).getTime(),
+  ]);
 };
 
-const covertToValidCoord = (coord) => {
+export const displayPathInViewport = (map, coords) => {
+   // Create a 'LngLatBounds' with both corners at the first coordinate.
+   const bounds = new mapboxgl.LngLatBounds(coords[0], coords[0]);
+
+   // Extend the 'LngLatBounds' to include every coordinate in the bounds result.
+   for (const coord of coords) {
+     bounds.extend(coord);
+   }
+ 
+   map.fitBounds(bounds, {
+     padding: 20,
+   });
+};
+
+export const covertToValidCoord = (coord) => {
   return [coord[0], coord[1]];
+};
+
+export const isCoordinatesInRange = (list, showToaster = true) => {
+  for (let item of list) {
+    if (!isLatitudeInRange(item?.latitude)) {
+      if (showToaster) toast.error("Latitude must be in range from -90 to 90");
+      return false;
+    }
+    if (!isLongitudeInRange(item?.longitude)) {
+      if (showToaster) toast.error("Longitude must be in range from -180 to 180");
+      return false;
+    }
+  }
+  return true;
+};
+
+export const isLatitudeInRange = (latitude) => {
+  if (Number(latitude) >= -90 && Number(latitude) <= 90) return true;
+  return false;
+};
+export const isLongitudeInRange = (longitude) => {
+  if (Number(longitude) >= -180 && Number(longitude) <= 180) return true;
+  return false;
 };

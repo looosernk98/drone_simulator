@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const ChooseFile = styled.div`
   max-width: 260px;
@@ -11,8 +11,15 @@ export const ChooseFile = styled.div`
     text-overflow: ellipsis; */
   }
 `;
+
 export const InputWrapper = styled.div`
   border-radius: 4px;
   padding: 10px;
   border: 2px dashed #cccccc;
+  ${(p) =>
+    p.disabled &&
+    css`
+      cursor: not-allowed;
+      opacity: 0.5;
+    `}
 `;
