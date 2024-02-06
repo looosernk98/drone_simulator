@@ -11,3 +11,6 @@
 
    ## To Run Test
     1. npm run test
+
+
+![alt text](https://github.com/looosernk98/drone_simulator/blob/master/src/assets/images/image-1.png)?raw=true
