@@ -95,3 +95,30 @@ export const isLongitudeInRange = (longitude) => {
   if (Number(longitude) >= -180 && Number(longitude) <= 180) return true;
   return false;
 };
+
+export const calculateHorizontalSpeed = (prev, curr) => {
+  if(!prev || !curr) return;
+  
+  const currLong = curr[0]
+  const prevLong = prev[0];
+
+  // Calculate displacement
+  const horizontalDisplacement = Math.abs(currLong - prevLong);
+  const timeDifference = 1; // You need to get the actual time difference
+  const horizontalSpeed = horizontalDisplacement / timeDifference;
+  
+  return horizontalSpeed;
+};
+
+export const calculateVerticalSpeed = (prev, curr) => {
+  if(!prev || !curr) return;
+
+  const currLat = curr[1];
+  const prevLat = prev[1];
+
+  const timeDifference = 1; // You need to get the actual time difference
+  const verticalDisplacement = Math.abs(currLat - prevLat);
+  const verticalSpeed = verticalDisplacement / timeDifference;
+  
+  return verticalSpeed;
+}

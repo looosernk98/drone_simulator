@@ -3,13 +3,13 @@ import Input from '../common/input';
 import DateTimeInput from '../common/dateTimeInput';
 import Button from '../common/button/index';
 import FileInput from '../common/fileInput/index.jsx';
-import * as S from './styles.js'
 import { isCoordinatesInRange, isLatitudeInRange, isLongitudeInRange } from '../../utils/util';
 import { toast } from 'react-toastify';
 import { SimulationContext } from '../../context';
+import * as S from './styles.js'
 
 const CoordinateForm = ({
-  coordinateList,
+  coordinateList = [],
   editIndex,
   setCoordinateList,
   setEditIndex,
@@ -67,7 +67,7 @@ const CoordinateForm = ({
     if (!isCoordinatesInRange(data, true)) return;
 
     toast.success('File uploaded successfully')
-    const dataList = data?.map((item) => ({ ...item, time: new Date(item?.time).toISOString() }))
+    const dataList = data?.map((item) => ({ ...item, time:new Date(item?.time ?? Date.now()).toISOString()}))
     setCoordinateList([...coordinateList, ...dataList])
   };
 

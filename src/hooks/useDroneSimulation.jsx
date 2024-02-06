@@ -10,7 +10,10 @@ const UseDroneSimulation = (untravelled) => {
   const [index, setIndex] = useState(0);
 
   const {
-    playSimulation
+    setPrevCoordinateValue,
+    playSimulation,
+    setPlaySimulation,
+    setCurrCoordinateValue,
   } = useContext(SimulationContext);
 
   useEffect(() => {
@@ -25,6 +28,7 @@ const UseDroneSimulation = (untravelled) => {
       const timeout = setTimeout(() => {
         const upadtedTravelledPath = [...travelledCoord, unTravelledCoord[index]]
         setTravelledCoord(upadtedTravelledPath)
+
         let data = {
           type: "FeatureCollection",
           features: [
@@ -59,17 +63,21 @@ const UseDroneSimulation = (untravelled) => {
         map.panTo(travelledCoord[travelledCoord.length - 1]);
 
         setIndex(index + 1)
+        setCurrCoordinateValue(unTravelledCoord[index]);
+        if(index >= 0)setPrevCoordinateValue(unTravelledCoord[index-1])
         res();
 
       }, 100);
-      if (index >= unTravelledCoord?.length || !playSimulation) clearTimeout(timeout)
+      if (index >= unTravelledCoord?.length || !playSimulation){
+        clearTimeout(timeout)
+        setPlaySimulation(false)
+      }
     });
   }
 
   if (playSimulation) {
     handleDroneSimulation()
   }
-
 
   return null;
 }

@@ -8,3 +8,6 @@
 
    ## To create build
     1. npm run build
+
+   ## To Run Test
+    1. npm run test

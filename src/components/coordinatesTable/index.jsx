@@ -25,10 +25,7 @@ const CoordinatesTable = ({
         coord.splice(index, 1)
         setCoordinateList(coord)
     }
-    const handleDeleteAllRows = () => {
-        if (playSimulation || editIndex != null) return true;
-        setCoordinateList([])
-    }
+
     return (
         <S.TableContainer>
             <S.TableHead>
@@ -36,14 +33,6 @@ const CoordinatesTable = ({
                     {COLUMNS.map((column, index) => (
                         <S.TableHeading key={`th-${index}`}>
                             {column}
-                            {index === COLUMNS.length - 1 && coordinateList?.length
-                                ? <Tooltip
-                                    content={!playSimulation ? 'Delete All Rows' : ''}
-                                    position='bottom'
-                                    id='delete-all'
-                                ><S.Delete disabled={editIndex != null} onClick={handleDeleteAllRows}><RiDeleteBin5Line /></S.Delete></Tooltip>
-
-                                : null}
                         </S.TableHeading>
                     ))}
                 </S.TableRow>

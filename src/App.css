@@ -1,17 +1,15 @@
+
 #map {
   height: 85vh;
   width: 70%;
   border-radius: 4px;
 }
 
-* {
-  font-family: Georgia, serif;
-}
-
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Georgia, serif;
 }
 
 main {
@@ -87,4 +85,18 @@ button:disabled {
   color: #000;
   text-align: end;
   cursor: pointer;
+}
+
+.sample-data{
+  text-decoration: underline;
+  color: #106ec5;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: end;
+  cursor: pointer;
+}
+.action-btn{
+  display: flex;
+  column-gap: 20px;
+  justify-content: flex-end;
 }

@@ -4,6 +4,7 @@ import Papa from 'papaparse';
 import { toast } from 'react-toastify';
 import * as XLSX from 'xlsx';
 import { isCoordinatesInRange } from '../../../utils/util';
+import Tooltip from '../tooltip';
 import * as S from './styles'
 
 const FileInput = ({ onFileUpload, disabled }) => {
@@ -52,14 +53,23 @@ const FileInput = ({ onFileUpload, disabled }) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ['.csv', '.xlsx'],
+    accept: {
+      'text/csv': ['.csv'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
+    },
   });
 
   return (
-    <S.InputWrapper {...getRootProps()}>
-      <input {...getInputProps()} />
-      <S.ChooseFile disabled={disabled}>Choose file {!error ? <span>{fileName}</span> : null}</S.ChooseFile>
-    </S.InputWrapper>
+    <Tooltip
+      id={'file-upload'}
+      position='top'
+      content={'File must contain data for 3 columns latitude, longitude and time(optional)'}
+    >
+      <S.InputWrapper {...getRootProps()}>
+        <input {...getInputProps()} />
+        <S.ChooseFile disabled={disabled}>Choose file {!error ? <span>{fileName}</span> : null}</S.ChooseFile>
+      </S.InputWrapper>
+    </Tooltip>
   );
 };
 

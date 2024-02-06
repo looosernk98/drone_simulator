@@ -11,5 +11,6 @@ export const Button = styled.button`
   background: white;
   border-radius: 8px;
   box-shadow: 2px 4px 8px 4px #e9e9e9bf;
+  width: fit-content;
   min-width: 110px;
 `;

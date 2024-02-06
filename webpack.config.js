@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const autoprefixer = require("autoprefixer");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
-
 const env = dotenv.config().parsed;
 const envKeys = env
   ? Object.keys(env).reduce((prev, next) => {

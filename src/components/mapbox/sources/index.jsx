@@ -10,7 +10,10 @@ const MapSources = ({
   const [unTravelledCoord, setUnTravelledCoord] = useState([])
 
   useEffect(() => {
-    if (!coordinateList?.length) return;
+    if (!coordinateList?.length){
+      setUnTravelledCoord([])
+      return;
+    }
     
     const validCoord= convertCoordinatesObjectToArray(coordinateList)
     const pathChunks = dividePathInChunks(validCoord)

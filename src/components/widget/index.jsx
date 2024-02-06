@@ -1,39 +1,56 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '../common/button';
 import { SimulationContext } from '../../context';
+import { calculateHorizontalSpeed, calculateVerticalSpeed } from '../../utils/util';
 import * as S from './styles'
 
-const Widget = ({ coordinateList }) => {
+
+const Widget = ({ coordinateList = [] }) => {
     const {
+        prevCoordinateValue,
+        currCoordinateValue,
+        playSimulation,
         setPlaySimulation
     } = useContext(SimulationContext);
+
+    const [latency, setLatency] = useState(0);
+
+    useEffect(() => {
+        if (playSimulation && currCoordinateValue) {
+            setLatency(latency + 100)
+        }
+    }, [playSimulation, currCoordinateValue])
+
+    const horizontalSpeed = calculateHorizontalSpeed(prevCoordinateValue, currCoordinateValue)?.toFixed(5);
+    const verticalSpeed = calculateVerticalSpeed(prevCoordinateValue, currCoordinateValue)?.toFixed(5);
+
     return (
         <S.Container>
             <S.LiveSimulationInfo>
                 <S.LiveInfo>Drone Telemetry</S.LiveInfo>
                 <S.Detail>
                     <S.Label>Longitude</S.Label>
-                    <S.Value>277.0</S.Value>
+                    <S.Value>{(currCoordinateValue[0] ?? coordinateList[0]?.longitude)?.toFixed(5) ?? '-'}</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Latitude</S.Label>
-                    <S.Value>208.0</S.Value>
+                    <S.Value>{(currCoordinateValue[1] ?? coordinateList[0]?.latitude)?.toFixed(5) ?? '-'}</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Vertical Speed</S.Label>
-                    <S.Value>2 m/s</S.Value>
+                    <S.Value>{verticalSpeed ? `${verticalSpeed} km/ms` : '-'}</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Horizontal Speed</S.Label>
-                    <S.Value>4 m/s</S.Value>
+                    <S.Value>{horizontalSpeed ? `${horizontalSpeed} km/ms` : '-'}</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Latency</S.Label>
-                    <S.Value>163 ms</S.Value>
+                    <S.Value>{latency ? `${latency} ms` : '-'}</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Altitude</S.Label>
-                    <S.Value>20.3 m</S.Value>
+                    <S.Value>123 m</S.Value>
                 </S.Detail>
                 <S.Detail>
                     <S.Label>Battery</S.Label>
@@ -50,6 +67,7 @@ const Widget = ({ coordinateList }) => {
                     <Button
                         type='button'
                         buttonText={'Simulate'}
+                        disabled={!coordinateList?.length}
                         onClick={() => setPlaySimulation(true)}
                     />
                 </S.Detail>
@@ -57,6 +75,7 @@ const Widget = ({ coordinateList }) => {
                     <Button
                         type='button'
                         buttonText={'Pause'}
+                        disabled={!coordinateList?.length}
                         onClick={() => setPlaySimulation(false)}
                     />
                 </S.Detail>
