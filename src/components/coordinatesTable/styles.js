@@ -43,7 +43,7 @@ export const ActionColumn = styled(TableData)`
     `}
 `;
 
-export const NoDataAvailable = styled.div`
+export const NoDataAvailable = styled.tr`
   display: flex;
   justify-content: center;
   align-items: center;

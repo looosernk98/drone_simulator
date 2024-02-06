@@ -64,7 +64,7 @@ const CoordinatesTable = ({
                         </S.TableRow>
                     ))
                     : <S.NoDataAvailable>
-                        No Coordinates, Please Add Coordinates!
+                        <td>No Coordinates, Please Add Coordinates!</td>
                     </S.NoDataAvailable>
                 }
             </S.TableBody>
