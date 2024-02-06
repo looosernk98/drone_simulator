@@ -13,4 +13,6 @@
     1. npm run test
 
 
-![alt text](https://github.com/looosernk98/drone_simulator/blob/master/src/assets/images/image-1.png)?raw=true
+![alt text](https://github.com/looosernk98/drone_simulator/blob/master/src/assets/images/image-1.png)
+![alt text](https://github.com/looosernk98/drone_simulator/blob/master/src/assets/images/image-2.png)
+![alt text](https://github.com/looosernk98/drone_simulator/blob/master/src/assets/images/image-3.png)
