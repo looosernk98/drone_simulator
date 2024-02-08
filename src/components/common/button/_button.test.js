@@ -1,5 +1,4 @@
 import {fireEvent, render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import Button from './index'
 
@@ -14,7 +13,7 @@ describe("Test Button Component", ()=>{
   })
 
   it('should click button', () => {
-    const onClickHandler = jest.fn(() => console.log("hi from handler"));
+    const onClickHandler = jest.fn();
     render(<Button buttonText={'Click me'} type='button'  onClick={onClickHandler}/>)
     fireEvent.click(screen.getByText('Click me'))
     expect(onClickHandler).toHaveBeenCalledTimes(1);

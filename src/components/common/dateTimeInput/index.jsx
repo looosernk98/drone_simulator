@@ -22,6 +22,7 @@ const DateTimeInput = ({
                     value={time?.split('.')[0]}
                     onChange={handleTimeChange}
                     disabled={disabled}
+                    aria-label='select-date-time'
                 />
             </S.DateTimeSelector>
         </>

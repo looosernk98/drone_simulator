@@ -22,6 +22,7 @@ const Input = ({
         onChange={onChange}
         disabled={isDisabled}
         required={required}
+        aria-label='input'
       />
     </S.InputContainer>
   )
